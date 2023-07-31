@@ -10,21 +10,20 @@ import SwiftUI
 import SDWebImageSwiftUI
 
 struct NewsView: View {
-    @ObservedObject var agents = NewsViewModel()
+    @ObservedObject var articles = NewsViewModel()
     @State private var searchText = ""
-    
     var body: some View {
         VStack {
             Text("News")
                 .font(.title)
                 .padding(.top, -30)
-            SearchBar(searchText: $searchText)
-            if let news = agents.newsData?.articles {
+            SearchBar(articlesViewModel: articles, searchText: $searchText)
+            if let news = articles.newsData?.articles {
                 List(news, id: \.url) { article in
                     ZStack {
-                        ArticleCellView(article: article)
+                        ArticleCellView(article: article, imageData: articles.getCachedImageFromRealm(url: article.url), error: $articles.isTheirAnError)
                             .frame(height: 200)
-                        NavigationLink(destination: ArticleDetails(article: article)) {
+                        NavigationLink(destination: ArticleDetails(article: article, imageData: articles.getCachedImageFromRealm(url: article.url), error: $articles.isTheirAnError)) {
                             EmptyView()
                         }
                         .opacity(0.0)
@@ -33,21 +32,36 @@ struct NewsView: View {
                 .listRowInsets(EdgeInsets())
             }
         }
+        .alert("No Internet", isPresented: $articles.showError) {
+            Text("No Internet")
+        }
     }
 }
 struct ArticleCellView: View {
     let article: Article
-    
+    let imageData: Data?
+    @Binding var error: Bool
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .center) {
-                WebImage(url: URL(string: article.urlToImage))
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: geometry.size.width, height: 200) // Set the fixed height of 200
-                    .cornerRadius(8) // Apply corner radius to the image
-                    .clipped()
-                
+                if error {
+                    if let imageD = imageData {
+                        let uiImage = UIImage(data: imageD)
+                        Image(uiImage: uiImage!)
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: geometry.size.width, height: 200)
+                            .cornerRadius(8)
+                            .clipped()
+                    }
+                } else {
+                    WebImage(url: URL(string: article.urlToImage))
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: geometry.size.width, height: 200) // Set the fixed height of 200
+                        .cornerRadius(8) // Apply corner radius to the image
+                        .clipped()
+                }
                 Color.black.opacity(0.3)
                     .frame(width: geometry.size.width, height: 200) // Set the fixed height of 200
                     .cornerRadius(8)
@@ -77,6 +91,7 @@ struct ArticleCellView: View {
 }
 
 struct SearchBar: View {
+    var articlesViewModel: NewsViewModel
     @Binding var searchText: String
     
     var body: some View {
@@ -92,7 +107,7 @@ struct SearchBar: View {
                         .foregroundColor(.gray)
                 }
                 .padding(.trailing, 8)
-               
+                
             }
             .background(Color(.systemGray5))
             .cornerRadius(8)
@@ -106,7 +121,7 @@ struct SearchBar: View {
             .padding(.leading, -10)
             .padding(.trailing, 8)
             Button {
-                print("Search")
+                articlesViewModel.fetchDataFromApi()
             } label: {
                 Image(systemName: "arrow.clockwise")
                     .foregroundColor(.gray)

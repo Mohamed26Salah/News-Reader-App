@@ -10,6 +10,8 @@ import SDWebImageSwiftUI
 
 struct ArticleDetails: View {
     let article: Article
+    let imageData: Data?
+    @Binding var error: Bool
     @State private var isFavorite = false
     @State private var showWebView = false
     var body: some View {
@@ -17,12 +19,24 @@ struct ArticleDetails: View {
             ScrollView {
                 VStack(spacing: 10) {
                     ZStack(alignment: .topLeading) {
-                        WebImage(url: URL(string: article.urlToImage))
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: geometry.size.width, height: 200)
-                            .cornerRadius(8)
-                            .clipped()
+                        if error {
+                            if let imageD = imageData {
+                                let uiImage = UIImage(data: imageD)
+                                Image(uiImage: uiImage!)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: geometry.size.width, height: 200)
+                                    .cornerRadius(8)
+                                    .clipped()
+                            }
+                        } else {
+                            WebImage(url: URL(string: article.urlToImage))
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: geometry.size.width, height: 200)
+                                .cornerRadius(8)
+                                .clipped()
+                        }
                         
                         Color.black.opacity(0.3)
                             .frame(width: geometry.size.width, height: 200)
@@ -108,10 +122,10 @@ struct ArticleDetails: View {
     }
 }
 
-struct ArticleDetails_Previews: PreviewProvider {
-    static let source = Source()
-    static let article = Article(source: source, author: "", title: "", description: "", url: "", urlToImage: "", publishedAt: "", content: "")
-    static var previews: some View {
-        ArticleDetails(article: article)
-    }
-}
+//struct ArticleDetails_Previews: PreviewProvider {
+//    static let source = Source()
+//    static let article = Article(source: source, author: "", title: "", description: "", url: "", urlToImage: "", publishedAt: "", content: "")
+//    static var previews: some View {
+//        ArticleDetails(article: article)
+//    }
+//}

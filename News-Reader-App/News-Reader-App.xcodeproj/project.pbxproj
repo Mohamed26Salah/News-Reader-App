@@ -22,6 +22,8 @@
 		AB2BAC242A76E2D700DD5410 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = AB2BAC232A76E2D700DD5410 /* SDWebImageSwiftUI */; };
 		AB2BAC272A76EFAB00DD5410 /* ArticleDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB2BAC262A76EFAB00DD5410 /* ArticleDetails.swift */; };
 		AB2BAC292A7708FA00DD5410 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB2BAC282A7708FA00DD5410 /* WebView.swift */; };
+		AB2BAC2E2A780DBD00DD5410 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = AB2BAC2D2A780DBD00DD5410 /* RealmSwift */; };
+		AB2BAC312A780E0400DD5410 /* RealmArticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB2BAC302A780E0400DD5410 /* RealmArticle.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +61,7 @@
 		AB2BAC252A76E37800DD5410 /* Empty.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Empty.md; sourceTree = "<group>"; };
 		AB2BAC262A76EFAB00DD5410 /* ArticleDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleDetails.swift; sourceTree = "<group>"; };
 		AB2BAC282A7708FA00DD5410 /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
+		AB2BAC302A780E0400DD5410 /* RealmArticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmArticle.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AB2BAC2E2A780DBD00DD5410 /* RealmSwift in Frameworks */,
 				AB2BAC242A76E2D700DD5410 /* SDWebImageSwiftUI in Frameworks */,
 				AB2BAC192A76DCDF00DD5410 /* OptionallyDecodable in Frameworks */,
 			);
@@ -151,6 +155,7 @@
 		AB2BAC102A76DB0100DD5410 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				AB2BAC2F2A780DCB00DD5410 /* RealmDataBase */,
 				AB2BAC132A76DBCC00DD5410 /* APIHandler.swift */,
 				AB2BAC152A76DC3800DD5410 /* NewsParser.swift */,
 			);
@@ -175,6 +180,14 @@
 			path = ViewModel;
 			sourceTree = "<group>";
 		};
+		AB2BAC2F2A780DCB00DD5410 /* RealmDataBase */ = {
+			isa = PBXGroup;
+			children = (
+				AB2BAC302A780E0400DD5410 /* RealmArticle.swift */,
+			);
+			path = RealmDataBase;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -194,6 +207,7 @@
 			packageProductDependencies = (
 				AB2BAC182A76DCDF00DD5410 /* OptionallyDecodable */,
 				AB2BAC232A76E2D700DD5410 /* SDWebImageSwiftUI */,
+				AB2BAC2D2A780DBD00DD5410 /* RealmSwift */,
 			);
 			productName = "News-Reader-App";
 			productReference = AB2BABE32A76DAC900DD5410 /* News-Reader-App.app */;
@@ -270,6 +284,7 @@
 			packageReferences = (
 				AB2BAC172A76DCDF00DD5410 /* XCRemoteSwiftPackageReference "OptionallyDecodable" */,
 				AB2BAC222A76E2D700DD5410 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
+				AB2BAC2C2A780DBD00DD5410 /* XCRemoteSwiftPackageReference "realm-swift" */,
 			);
 			productRefGroup = AB2BABE42A76DAC900DD5410 /* Products */;
 			projectDirPath = "";
@@ -320,6 +335,7 @@
 				AB2BAC212A76E21C00DD5410 /* NewsView.swift in Sources */,
 				AB2BAC1B2A76DD2900DD5410 /* NewsViewModel.swift in Sources */,
 				AB2BABE72A76DAC900DD5410 /* News_Reader_AppApp.swift in Sources */,
+				AB2BAC312A780E0400DD5410 /* RealmArticle.swift in Sources */,
 				AB2BAC272A76EFAB00DD5410 /* ArticleDetails.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -663,6 +679,14 @@
 				minimumVersion = 2.0.0;
 			};
 		};
+		AB2BAC2C2A780DBD00DD5410 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -675,6 +699,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AB2BAC222A76E2D700DD5410 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
 			productName = SDWebImageSwiftUI;
+		};
+		AB2BAC2D2A780DBD00DD5410 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AB2BAC2C2A780DBD00DD5410 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

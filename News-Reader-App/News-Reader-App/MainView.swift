@@ -24,19 +24,6 @@ struct MainView: View {
                 }
                 .bold()
                 .tag(0)
-//                .overlay(
-//                    VStack {
-//                        Text("News")
-//                            .font(.title)
-//                            .foregroundColor(.black)
-//                            .padding()
-//                        
-//                        Spacer()
-//                    }
-//                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-//                        .padding(),
-//                    alignment: .topLeading
-//                )
                 ZStack {
                     Color.white
                         .ignoresSafeArea(.all)
