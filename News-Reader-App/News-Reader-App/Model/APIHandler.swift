@@ -36,7 +36,7 @@ class NetworkAPIProvider: APIProvider {
 }
 
 class APIClient {
-    private let baseURL: URL
+    var baseURL: URL
     private let apiProvider: APIProvider
     
     init(baseURL: URL, apiProvider: APIProvider) {

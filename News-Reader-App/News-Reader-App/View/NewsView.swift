@@ -14,9 +14,10 @@ struct NewsView: View {
     @State private var searchText = ""
     var body: some View {
         VStack {
-            Text("News")
+            Text(articles.queury + " News")
                 .font(.title)
                 .padding(.top, -30)
+                .foregroundColor(.black)
             SearchBar(articlesViewModel: articles, searchText: $searchText)
             if let news = articles.newsData?.articles {
                 List(news, id: \.url) { article in
@@ -56,6 +57,10 @@ struct ArticleCellView: View {
                     }
                 } else {
                     WebImage(url: URL(string: article.urlToImage))
+                        .placeholder(content: {
+                            ProgressView()
+                                .font(.largeTitle)
+                        })
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .frame(width: geometry.size.width, height: 200) // Set the fixed height of 200
@@ -93,7 +98,6 @@ struct ArticleCellView: View {
 struct SearchBar: View {
     var articlesViewModel: NewsViewModel
     @Binding var searchText: String
-    
     var body: some View {
         HStack {
             HStack {
@@ -113,7 +117,8 @@ struct SearchBar: View {
             .cornerRadius(8)
             .padding(.horizontal)
             Button {
-                print("Search")
+                articlesViewModel.queury = searchText
+                articlesViewModel.searchAPI()
             } label: {
                 Image(systemName: "magnifyingglass")
                     .foregroundColor(.gray)
@@ -122,10 +127,14 @@ struct SearchBar: View {
             .padding(.trailing, 8)
             Button {
                 articlesViewModel.fetchDataFromApi()
+                //To Give the feeling of an Refresh
+//                self.newsData?.articles.shuffle()
             } label: {
                 Image(systemName: "arrow.clockwise")
                     .foregroundColor(.gray)
             }
+            .disabled(articlesViewModel.isRefreshDisabled)
+            .opacity(articlesViewModel.isRefreshDisabled ? 0.2 : 1.0)
             .padding(.trailing, 8)
         }
         

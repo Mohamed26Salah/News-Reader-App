@@ -12,10 +12,11 @@ class NewsViewModel: ObservableObject {
     private let provider = NetworkAPIProvider()
     private let baseURL = URL(string: "https://newsapi.org/v2/everything?q=Apple&from=2023-06-30&sortBy=popularity&apiKey=3f913531a6404bc4a4b63f57f4c7dff8")
     private let apiHandler: APIClient
+    @Published var queury: String = "Apple"
     @Published var newsData: NewsParser?
-    @Published var newsAbout: String = "Apple"
     @Published var showError: Bool = false
     @Published var isTheirAnError: Bool = false
+    @Published var isRefreshDisabled: Bool = false
     init() {
         guard let apiURL = baseURL else {
             fatalError("Failed to create baseURL")
@@ -23,6 +24,7 @@ class NewsViewModel: ObservableObject {
         apiHandler = APIClient(baseURL: apiURL, apiProvider: provider)
         fetchDataFromApi()
     }
+
     func fetchDataFromApi() {
         apiHandler.fetchResourceData(modelDTO: newsData, completion: { [weak self] result in
             guard let self = self else { return }
@@ -36,14 +38,16 @@ class NewsViewModel: ObservableObject {
         })
         
     }
+    func searchAPI() {
+        apiHandler.baseURL = URL(string: "https://newsapi.org/v2/everything?q=\(queury)&from=2023-06-30&sortBy=popularity&apiKey=3f913531a6404bc4a4b63f57f4c7dff8")!
+        fetchDataFromApi()
+    }
     private func getDataFromParser(data: NewsParser?) {
         DispatchQueue.main.async {
-            print(self.newsData?.articles.count)
-            self.newsData?.articles.removeAll()
-            print(self.newsData?.articles.count)
             self.newsData = data
-            print(self.newsData?.articles.count)
-            //                    self.isTheirAnError = false
+            //To Give the feeling of an Refresh
+            self.newsData?.articles.shuffle()
+            // self.isTheirAnError = false
         }
         if let dataToCache = data {
             self.clearCachedData()
@@ -82,6 +86,10 @@ class NewsViewModel: ObservableObject {
             }
             
             // Cache the images as CachedImage objects
+            DispatchQueue.main.async {
+                self.isRefreshDisabled = true
+            }
+
             for article in articles {
                 if let imageURL = URL(string: article.urlToImage), let imageData = try? Data(contentsOf: imageURL) {
                     let cachedImage = CachedImage()
@@ -91,6 +99,9 @@ class NewsViewModel: ObservableObject {
                         realm.add(cachedImage, update: .modified)
                     }
                 }
+            }
+            DispatchQueue.main.async {
+                self.isRefreshDisabled = false
             }
         } catch {
             print("Error caching articles to Realm: \(error)")
