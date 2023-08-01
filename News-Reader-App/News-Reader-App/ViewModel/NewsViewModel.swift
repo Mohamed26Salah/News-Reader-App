@@ -7,14 +7,16 @@
 
 import Foundation
 import RealmSwift
+import UIKit
 
 class NewsViewModel: ObservableObject {
     private let provider = NetworkAPIProvider()
-    private let baseURL = URL(string: "https://newsapi.org/v2/everything?q=Apple&from=2023-06-30&sortBy=popularity&apiKey=3f913531a6404bc4a4b63f57f4c7dff8")
+    private let baseURL = URL(string: "https://newsapi.org/v2/everything?q=Google&from=2023-07-01&sortBy=popularity&apiKey=3f913531a6404bc4a4b63f57f4c7dff8")
     private let apiHandler: APIClient
     @Published var queury: String = "Apple"
     @Published var newsData: NewsParser?
     @Published var showError: Bool = false
+    @Published var errorMessage: String = ""
     @Published var isTheirAnError: Bool = false
     @Published var isRefreshDisabled: Bool = false
     init() {
@@ -30,10 +32,9 @@ class NewsViewModel: ObservableObject {
             guard let self = self else { return }
             switch result {
             case .success(let data):
-                print("Working")
                 getDataFromParser(data: data)
             case .failure(let error):
-                getDataFromRealm()
+                getDataFromRealm(error)
             }
         })
         
@@ -47,19 +48,20 @@ class NewsViewModel: ObservableObject {
             self.newsData = data
             //To Give the feeling of an Refresh
             self.newsData?.articles.shuffle()
-            // self.isTheirAnError = false
+            self.isTheirAnError = false
         }
         if let dataToCache = data {
             self.clearCachedData()
             self.cacheArticlesToRealm(articles: dataToCache.articles)
         }
     }
-    private func getDataFromRealm() {
+    private func getDataFromRealm(_ error: Error) {
+        let cachedArticles = self.getCachedArticlesFromRealm()
+        let newsParser = NewsParser(status: "200", totalResults: cachedArticles.count, articles: cachedArticles)
         DispatchQueue.main.async {
             self.isTheirAnError = true
             self.showError.toggle()
-            let cachedArticles = self.getCachedArticlesFromRealm()
-            let newsParser = NewsParser(status: "200", totalResults: cachedArticles.count, articles: cachedArticles)
+            self.errorMessage = error.localizedDescription
             self.newsData = newsParser
         }
     }
@@ -89,9 +91,10 @@ class NewsViewModel: ObservableObject {
             DispatchQueue.main.async {
                 self.isRefreshDisabled = true
             }
-
             for article in articles {
-                if let imageURL = URL(string: article.urlToImage), let imageData = try? Data(contentsOf: imageURL) {
+                if let imageURL = URL(string: article.urlToImage),
+                   let image = UIImage(data: try Data(contentsOf: imageURL)),
+                   let imageData = image.jpeg(.lowest) {
                     let cachedImage = CachedImage()
                     cachedImage.url = article.url
                     cachedImage.imageData = imageData
@@ -99,12 +102,24 @@ class NewsViewModel: ObservableObject {
                         realm.add(cachedImage, update: .modified)
                     }
                 }
+//                if let imageURL = URL(string: article.urlToImage), let imageData = try? Data(contentsOf: imageURL) {
+//                    let cachedImage = CachedImage()
+//                    cachedImage.url = article.url
+//                    cachedImage.imageData = imageData
+//                    try realm.write {
+//                        realm.add(cachedImage, update: .modified)
+//                    }
+//                }
             }
             DispatchQueue.main.async {
                 self.isRefreshDisabled = false
             }
         } catch {
-            print("Error caching articles to Realm: \(error)")
+//            print("Error caching articles to Realm: \(error)")
+            DispatchQueue.main.async {
+                self.showError.toggle()
+                self.errorMessage = "Error in saving the news"
+            }
         }
     }
     
@@ -132,7 +147,11 @@ class NewsViewModel: ObservableObject {
                 )
             }
         } catch {
-            print("Error retrieving cached articles from Realm: \(error)")
+//            print("Error retrieving cached articles from Realm: \(error)")
+            DispatchQueue.main.async {
+                self.showError.toggle()
+                self.errorMessage = "Error retrieving saved articles"
+            }
             return []
         }
     }
@@ -144,7 +163,11 @@ class NewsViewModel: ObservableObject {
                 return cachedImage.imageData
             }
         } catch {
-            print("Error retrieving cached image from Realm: \(error)")
+            DispatchQueue.main.async {
+                self.showError.toggle()
+                self.errorMessage = "Error retrieving cached image"
+            }
+//            print("Error retrieving cached image from Realm: \(error)")
         }
         return nil
     }
@@ -159,7 +182,11 @@ class NewsViewModel: ObservableObject {
                 realm.delete(realm.objects(RealmSource.self))
             }
         } catch {
-            print("Error clearing cached data: \(error)")
+            DispatchQueue.main.async {
+                self.showError.toggle()
+                self.errorMessage = "SomeThing Went Wrong"
+            }
+//            print("Error clearing cached data: \(error)")
         }
     }
     

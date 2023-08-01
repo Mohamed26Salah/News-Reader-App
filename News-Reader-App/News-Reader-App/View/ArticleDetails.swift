@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SDWebImageSwiftUI
+import SystemConfiguration
 
 struct ArticleDetails: View {
     let article: Article
@@ -14,6 +15,7 @@ struct ArticleDetails: View {
     @Binding var error: Bool
     @State private var isFavorite = false
     @State private var showWebView = false
+    @State private var showNetworkError = false
     var body: some View {
         GeometryReader { geometry in
             ScrollView {
@@ -97,10 +99,14 @@ struct ArticleDetails: View {
                         .padding()
                     
                     Button(action: {
-                        //                    if let url = URL(string: article.url) {
-                        //                        UIApplication.shared.open(url)
-                        //                    }
-                        showWebView.toggle()
+                        // if let url = URL(string: article.url) {
+                        //    UIApplication.shared.open(url)
+                        // }
+                        if isInternetAvailable() {
+                            showWebView.toggle()
+                        } else {
+                            showNetworkError.toggle()
+                        }
                     }) {
                         Text("Read More")
                             .padding()
@@ -118,8 +124,33 @@ struct ArticleDetails: View {
         .sheet(isPresented: $showWebView) {
             WebView(urlString: article.url)
         }
+        .alert("No Internet", isPresented: $showNetworkError) {
+        }
         
     }
+    func isInternetAvailable() -> Bool {
+        var zeroAddress = sockaddr_in()
+        zeroAddress.sin_len = UInt8(MemoryLayout.size(ofValue: zeroAddress))
+        zeroAddress.sin_family = sa_family_t(AF_INET)
+        
+        guard let defaultRouteReachability = withUnsafePointer(to: &zeroAddress, {
+            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
+                SCNetworkReachabilityCreateWithAddress(nil, $0)
+            }
+        }) else {
+            return false
+        }
+        
+        var flags: SCNetworkReachabilityFlags = []
+        if !SCNetworkReachabilityGetFlags(defaultRouteReachability, &flags) {
+            return false
+        }
+        
+        let isReachable = flags.contains(.reachable)
+        let needsConnection = flags.contains(.connectionRequired)
+        return isReachable && !needsConnection
+    }
+
 }
 
 //struct ArticleDetails_Previews: PreviewProvider {

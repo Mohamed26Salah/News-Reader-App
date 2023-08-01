@@ -17,8 +17,8 @@ struct NewsView: View {
             Text(articles.queury + " News")
                 .font(.title)
                 .padding(.top, -30)
-                .foregroundColor(.black)
-            SearchBar(articlesViewModel: articles, searchText: $searchText)
+                .foregroundColor(Color(UIColor.label))
+            SearchBar(articlesViewModel: articles, isRefrehDisabled: $articles.isRefreshDisabled, searchText: $searchText)
             if let news = articles.newsData?.articles {
                 List(news, id: \.url) { article in
                     ZStack {
@@ -33,8 +33,8 @@ struct NewsView: View {
                 .listRowInsets(EdgeInsets())
             }
         }
-        .alert("No Internet", isPresented: $articles.showError) {
-            Text("No Internet")
+//        .background(Color(UIColor.systemBackground))
+        .alert(articles.errorMessage, isPresented: $articles.showError) {
         }
     }
 }
@@ -63,19 +63,19 @@ struct ArticleCellView: View {
                         })
                         .resizable()
                         .aspectRatio(contentMode: .fill)
-                        .frame(width: geometry.size.width, height: 200) // Set the fixed height of 200
-                        .cornerRadius(8) // Apply corner radius to the image
+                        .frame(width: geometry.size.width, height: 200)
+                        .cornerRadius(8)
                         .clipped()
                 }
                 Color.black.opacity(0.3)
-                    .frame(width: geometry.size.width, height: 200) // Set the fixed height of 200
+                    .frame(width: geometry.size.width, height: 200)
                     .cornerRadius(8)
                 
                 VStack(alignment: .leading, spacing: 8) {
                     Text(article.title)
                         .font(.title2)
                         .foregroundColor(.white)
-                        .lineLimit(2) // Truncate the title to 2 lines
+                        .lineLimit(2)
                     Text("Author: " + article.author)
                         .font(.headline)
                         .bold()
@@ -83,20 +83,21 @@ struct ArticleCellView: View {
                     Text(article.description.prefix(100))
                         .font(.subheadline)
                         .foregroundColor(.white)
-                        .lineLimit(3) // Truncate the description to 3 lines
+                        .lineLimit(3)
                 }
                 .padding()
                 .alignmentGuide(.top, computeValue: { d in
                     (200 - d.height) / 2 // Center the content vertically within the 200 height
                 })
             }
-            .frame(width: geometry.size.width, height: 200) // Set the fixed height of 200
+            .frame(width: geometry.size.width, height: 200)
         }
     }
 }
 
 struct SearchBar: View {
     var articlesViewModel: NewsViewModel
+    @Binding var isRefrehDisabled: Bool
     @Binding var searchText: String
     var body: some View {
         HStack {
@@ -125,17 +126,24 @@ struct SearchBar: View {
             }
             .padding(.leading, -10)
             .padding(.trailing, 8)
-            Button {
-                articlesViewModel.fetchDataFromApi()
-                //To Give the feeling of an Refresh
-//                self.newsData?.articles.shuffle()
-            } label: {
-                Image(systemName: "arrow.clockwise")
-                    .foregroundColor(.gray)
+            //ProgressView
+            if isRefrehDisabled {
+                ProgressView()
+                    .font(.body)
+                    .padding(.trailing, 8)
+            } else {
+                Button {
+                    articlesViewModel.fetchDataFromApi()
+                    //To Give the feeling of an Refresh
+                    //                self.newsData?.articles.shuffle()
+                } label: {
+                    Image(systemName: "arrow.clockwise")
+                        .foregroundColor(.gray)
+                }
+                .disabled(isRefrehDisabled)
+                .opacity(isRefrehDisabled ? 0.2 : 1.0)
+                .padding(.trailing, 8)
             }
-            .disabled(articlesViewModel.isRefreshDisabled)
-            .opacity(articlesViewModel.isRefreshDisabled ? 0.2 : 1.0)
-            .padding(.trailing, 8)
         }
         
     }

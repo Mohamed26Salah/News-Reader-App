@@ -43,6 +43,7 @@ struct MainView: View {
                 UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
             }
         }
+        .preferredColorScheme(.light)
     }
 }
 
