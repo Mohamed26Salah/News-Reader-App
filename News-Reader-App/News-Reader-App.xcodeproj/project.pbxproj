@@ -25,6 +25,10 @@
 		ABA000D32A79C923000EC3A6 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = ABA000D22A79C923000EC3A6 /* SDWebImageSwiftUI */; };
 		ABA000D52A79C929000EC3A6 /* OptionallyDecodable in Frameworks */ = {isa = PBXBuildFile; productRef = ABA000D42A79C929000EC3A6 /* OptionallyDecodable */; };
 		ABA000D72A79C991000EC3A6 /* articles.json in Resources */ = {isa = PBXBuildFile; fileRef = ABA000D62A79C991000EC3A6 /* articles.json */; };
+		ABA000DF2A79CFB5000EC3A6 /* News_Reader_Realm_AppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABA000DE2A79CFB5000EC3A6 /* News_Reader_Realm_AppTests.swift */; };
+		ABA000E62A79CFC7000EC3A6 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = ABA000E52A79CFC7000EC3A6 /* SDWebImageSwiftUI */; };
+		ABA000E82A79CFCD000EC3A6 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = ABA000E72A79CFCD000EC3A6 /* RealmSwift */; };
+		ABA000EA2A79CFD6000EC3A6 /* OptionallyDecodable in Frameworks */ = {isa = PBXBuildFile; productRef = ABA000E92A79CFD6000EC3A6 /* OptionallyDecodable */; };
 		ABBB54192A796C10004E7CBF /* Extenstions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABBB54182A796C10004E7CBF /* Extenstions.swift */; };
 		ABBB541B2A7975D4004E7CBF /* ReachabilityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABBB541A2A7975D4004E7CBF /* ReachabilityManager.swift */; };
 		ABBB54292A79C2DD004E7CBF /* News_Reader_AppTests2.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABBB54282A79C2DD004E7CBF /* News_Reader_AppTests2.swift */; };
@@ -32,6 +36,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		ABA000E02A79CFB5000EC3A6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AB2BABDB2A76DAC900DD5410 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AB2BABE22A76DAC900DD5410;
+			remoteInfo = "News-Reader-App";
+		};
 		ABBB542A2A79C2DD004E7CBF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = AB2BABDB2A76DAC900DD5410 /* Project object */;
@@ -56,6 +67,8 @@
 		AB2BAC282A7708FA00DD5410 /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		AB2BAC302A780E0400DD5410 /* RealmArticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmArticle.swift; sourceTree = "<group>"; };
 		ABA000D62A79C991000EC3A6 /* articles.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = articles.json; sourceTree = "<group>"; };
+		ABA000DC2A79CFB5000EC3A6 /* News-Reader-Realm-AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "News-Reader-Realm-AppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		ABA000DE2A79CFB5000EC3A6 /* News_Reader_Realm_AppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = News_Reader_Realm_AppTests.swift; sourceTree = "<group>"; };
 		ABBB54182A796C10004E7CBF /* Extenstions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extenstions.swift; sourceTree = "<group>"; };
 		ABBB541A2A7975D4004E7CBF /* ReachabilityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReachabilityManager.swift; sourceTree = "<group>"; };
 		ABBB54262A79C2DC004E7CBF /* News-Reader-AppTests2.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "News-Reader-AppTests2.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -71,6 +84,16 @@
 				AB2BAC2E2A780DBD00DD5410 /* RealmSwift in Frameworks */,
 				AB2BAC242A76E2D700DD5410 /* SDWebImageSwiftUI in Frameworks */,
 				AB2BAC192A76DCDF00DD5410 /* OptionallyDecodable in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ABA000D92A79CFB5000EC3A6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ABA000E82A79CFCD000EC3A6 /* RealmSwift in Frameworks */,
+				ABA000E62A79CFC7000EC3A6 /* SDWebImageSwiftUI in Frameworks */,
+				ABA000EA2A79CFD6000EC3A6 /* OptionallyDecodable in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -92,6 +115,7 @@
 			children = (
 				AB2BABE52A76DAC900DD5410 /* News-Reader-App */,
 				ABBB54272A79C2DD004E7CBF /* News-Reader-AppTests2 */,
+				ABA000DD2A79CFB5000EC3A6 /* News-Reader-Realm-AppTests */,
 				AB2BABE42A76DAC900DD5410 /* Products */,
 				ABA000CF2A79C901000EC3A6 /* Frameworks */,
 			);
@@ -102,6 +126,7 @@
 			children = (
 				AB2BABE32A76DAC900DD5410 /* News-Reader-App.app */,
 				ABBB54262A79C2DC004E7CBF /* News-Reader-AppTests2.xctest */,
+				ABA000DC2A79CFB5000EC3A6 /* News-Reader-Realm-AppTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -172,6 +197,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		ABA000DD2A79CFB5000EC3A6 /* News-Reader-Realm-AppTests */ = {
+			isa = PBXGroup;
+			children = (
+				ABA000DE2A79CFB5000EC3A6 /* News_Reader_Realm_AppTests.swift */,
+			);
+			path = "News-Reader-Realm-AppTests";
+			sourceTree = "<group>";
+		};
 		ABBB54142A79336F004E7CBF /* APIClient */ = {
 			isa = PBXGroup;
 			children = (
@@ -225,6 +258,29 @@
 			productReference = AB2BABE32A76DAC900DD5410 /* News-Reader-App.app */;
 			productType = "com.apple.product-type.application";
 		};
+		ABA000DB2A79CFB5000EC3A6 /* News-Reader-Realm-AppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = ABA000E22A79CFB5000EC3A6 /* Build configuration list for PBXNativeTarget "News-Reader-Realm-AppTests" */;
+			buildPhases = (
+				ABA000D82A79CFB5000EC3A6 /* Sources */,
+				ABA000D92A79CFB5000EC3A6 /* Frameworks */,
+				ABA000DA2A79CFB5000EC3A6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				ABA000E12A79CFB5000EC3A6 /* PBXTargetDependency */,
+			);
+			name = "News-Reader-Realm-AppTests";
+			packageProductDependencies = (
+				ABA000E52A79CFC7000EC3A6 /* SDWebImageSwiftUI */,
+				ABA000E72A79CFCD000EC3A6 /* RealmSwift */,
+				ABA000E92A79CFD6000EC3A6 /* OptionallyDecodable */,
+			);
+			productName = "News-Reader-Realm-AppTests";
+			productReference = ABA000DC2A79CFB5000EC3A6 /* News-Reader-Realm-AppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		ABBB54252A79C2DC004E7CBF /* News-Reader-AppTests2 */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = ABBB542C2A79C2DD004E7CBF /* Build configuration list for PBXNativeTarget "News-Reader-AppTests2" */;
@@ -261,6 +317,10 @@
 					AB2BABE22A76DAC900DD5410 = {
 						CreatedOnToolsVersion = 14.3.1;
 					};
+					ABA000DB2A79CFB5000EC3A6 = {
+						CreatedOnToolsVersion = 14.3.1;
+						TestTargetID = AB2BABE22A76DAC900DD5410;
+					};
 					ABBB54252A79C2DC004E7CBF = {
 						CreatedOnToolsVersion = 14.3.1;
 						TestTargetID = AB2BABE22A76DAC900DD5410;
@@ -287,6 +347,7 @@
 			targets = (
 				AB2BABE22A76DAC900DD5410 /* News-Reader-App */,
 				ABBB54252A79C2DC004E7CBF /* News-Reader-AppTests2 */,
+				ABA000DB2A79CFB5000EC3A6 /* News-Reader-Realm-AppTests */,
 			);
 		};
 /* End PBXProject section */
@@ -298,6 +359,13 @@
 			files = (
 				AB2BABEE2A76DACA00DD5410 /* Preview Assets.xcassets in Resources */,
 				AB2BABEB2A76DACA00DD5410 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ABA000DA2A79CFB5000EC3A6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -330,6 +398,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		ABA000D82A79CFB5000EC3A6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ABA000DF2A79CFB5000EC3A6 /* News_Reader_Realm_AppTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		ABBB54222A79C2DC004E7CBF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -342,6 +418,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		ABA000E12A79CFB5000EC3A6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AB2BABE22A76DAC900DD5410 /* News-Reader-App */;
+			targetProxy = ABA000E02A79CFB5000EC3A6 /* PBXContainerItemProxy */;
+		};
 		ABBB542B2A79C2DD004E7CBF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = AB2BABE22A76DAC900DD5410 /* News-Reader-App */;
@@ -522,6 +603,42 @@
 			};
 			name = Release;
 		};
+		ABA000E32A79CFB5000EC3A6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3Q8FDFK3WX;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.salah.12488.News-Reader-Realm-AppTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/News-Reader-App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/News-Reader-App";
+			};
+			name = Debug;
+		};
+		ABA000E42A79CFB5000EC3A6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3Q8FDFK3WX;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.salah.12488.News-Reader-Realm-AppTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/News-Reader-App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/News-Reader-App";
+			};
+			name = Release;
+		};
 		ABBB542D2A79C2DD004E7CBF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -575,6 +692,15 @@
 			buildConfigurations = (
 				AB2BAC082A76DACA00DD5410 /* Debug */,
 				AB2BAC092A76DACA00DD5410 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		ABA000E22A79CFB5000EC3A6 /* Build configuration list for PBXNativeTarget "News-Reader-Realm-AppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ABA000E32A79CFB5000EC3A6 /* Debug */,
+				ABA000E42A79CFB5000EC3A6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -644,6 +770,21 @@
 			productName = SDWebImageSwiftUI;
 		};
 		ABA000D42A79C929000EC3A6 /* OptionallyDecodable */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AB2BAC172A76DCDF00DD5410 /* XCRemoteSwiftPackageReference "OptionallyDecodable" */;
+			productName = OptionallyDecodable;
+		};
+		ABA000E52A79CFC7000EC3A6 /* SDWebImageSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AB2BAC222A76E2D700DD5410 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
+			productName = SDWebImageSwiftUI;
+		};
+		ABA000E72A79CFCD000EC3A6 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AB2BAC2C2A780DBD00DD5410 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
+		};
+		ABA000E92A79CFD6000EC3A6 /* OptionallyDecodable */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = AB2BAC172A76DCDF00DD5410 /* XCRemoteSwiftPackageReference "OptionallyDecodable" */;
 			productName = OptionallyDecodable;

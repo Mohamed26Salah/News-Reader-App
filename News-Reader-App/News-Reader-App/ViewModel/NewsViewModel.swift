@@ -11,7 +11,7 @@ import UIKit
 
 class NewsViewModel: ObservableObject {
     private let provider = NetworkAPIProvider()
-    private let baseURL = URL(string: "https://newsapi.org/v2/everything?q=Google&from=2023-07-01&sortBy=popularity&apiKey=3f913531a6404bc4a4b63f57f4c7dff8")
+    private let baseURL = URL(string: "https://newsapi.org/v2/everything?q=Google&from=2023-07-02&sortBy=popularity&apiKey=3f913531a6404bc4a4b63f57f4c7dff8")
     private let apiHandler: APIClient
     @Published var queury: String = "Apple"
     @Published var newsData: NewsParser?
@@ -26,12 +26,13 @@ class NewsViewModel: ObservableObject {
         apiHandler = APIClient(baseURL: apiURL, apiProvider: provider)
         fetchDataFromApi()
     }
-
+    
     func fetchDataFromApi() {
         apiHandler.fetchResourceData(modelDTO: newsData, completion: { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let data):
+                print("Success")
                 getDataFromParser(data: data)
             case .failure(let error):
                 getDataFromRealm(error)
@@ -40,7 +41,7 @@ class NewsViewModel: ObservableObject {
         
     }
     func searchAPI() {
-        apiHandler.baseURL = URL(string: "https://newsapi.org/v2/everything?q=\(queury)&from=2023-06-30&sortBy=popularity&apiKey=3f913531a6404bc4a4b63f57f4c7dff8")!
+        apiHandler.baseURL = URL(string: "https://newsapi.org/v2/everything?q=\(queury)&from=2023-07-02&sortBy=popularity&apiKey=3f913531a6404bc4a4b63f57f4c7dff8")!
         fetchDataFromApi()
     }
     private func getDataFromParser(data: NewsParser?) {
@@ -69,7 +70,6 @@ class NewsViewModel: ObservableObject {
     func cacheArticlesToRealm(articles: [Article]) {
         do {
             let realm = try Realm()
-            print(realm.configuration.fileURL!)
             // Convert Article objects to RealmArticle and save them
             try realm.write {
                 for article in articles {
@@ -91,38 +91,81 @@ class NewsViewModel: ObservableObject {
             DispatchQueue.main.async {
                 self.isRefreshDisabled = true
             }
-            for article in articles {
-                if let imageURL = URL(string: article.urlToImage),
-                   let image = UIImage(data: try Data(contentsOf: imageURL)),
-                   let imageData = image.jpeg(.lowest) {
-                    let cachedImage = CachedImage()
-                    cachedImage.url = article.url
-                    cachedImage.imageData = imageData
-                    try realm.write {
-                        realm.add(cachedImage, update: .modified)
-                    }
+            cachImagesAsync(articles: articles) {
+                DispatchQueue.main.async {
+                    self.isRefreshDisabled = false
                 }
-//                if let imageURL = URL(string: article.urlToImage), let imageData = try? Data(contentsOf: imageURL) {
-//                    let cachedImage = CachedImage()
-//                    cachedImage.url = article.url
-//                    cachedImage.imageData = imageData
-//                    try realm.write {
-//                        realm.add(cachedImage, update: .modified)
-//                    }
-//                }
-            }
-            DispatchQueue.main.async {
-                self.isRefreshDisabled = false
+                
             }
         } catch {
-//            print("Error caching articles to Realm: \(error)")
             DispatchQueue.main.async {
                 self.showError.toggle()
                 self.errorMessage = "Error in saving the news"
             }
         }
     }
-    
+    func cachImagesAsync(articles: [Article], completion: @escaping () -> Void) {
+        let dispatchGroup = DispatchGroup()
+        
+        dispatchGroup.enter()
+
+        for article in articles {
+            if let imageURL = URL(string: article.urlToImage) {
+                dispatchGroup.enter()
+                let task = URLSession.shared.dataTask(with: imageURL) { data, _, error in
+                    if let imageData = data {
+                        if let compressedImageData = UIImage(data: imageData)?.jpeg(.lowest) {
+                            DispatchQueue.main.async {
+                                do {
+                                    let realm = try Realm()
+                                    let cachedImage = CachedImage()
+                                    cachedImage.url = article.url
+                                    cachedImage.imageData = compressedImageData
+                                    
+                                    try realm.write {
+                                        realm.add(cachedImage, update: .modified)
+                                    }
+                                } catch {
+                                    print("Error updating Realm with compressed image data: \(error)")
+                                }
+                                
+                                dispatchGroup.leave()
+                            }
+                        } else {
+                            print("Error compressing the image.")
+                            dispatchGroup.leave()
+                        }
+                    } else if let error = error {
+                        print("Error downloading the image: \(error)")
+                        dispatchGroup.leave()
+                    }
+                }
+                task.resume()
+            }
+        }
+        
+        dispatchGroup.leave()
+
+        dispatchGroup.notify(queue: .main) {
+            completion()
+        }
+    }
+
+
+    func cachImagesSync(articles: [Article]) {
+//        for article in articles {
+//            if let imageURL = URL(string: article.urlToImage),
+//               let image = UIImage(data: try Data(contentsOf: imageURL)),
+//               let imageData = image.jpeg(.lowest) {
+//                let cachedImage = CachedImage()
+//                cachedImage.url = article.url
+//                cachedImage.imageData = imageData
+//                try realm.write {
+//                    realm.add(cachedImage, update: .modified)
+//                }
+//            }
+//        }
+    }
     // Step 4: Retrieve cached articles and images
     
     func getCachedArticlesFromRealm() -> [Article] {
@@ -147,7 +190,6 @@ class NewsViewModel: ObservableObject {
                 )
             }
         } catch {
-//            print("Error retrieving cached articles from Realm: \(error)")
             DispatchQueue.main.async {
                 self.showError.toggle()
                 self.errorMessage = "Error retrieving saved articles"
@@ -167,7 +209,6 @@ class NewsViewModel: ObservableObject {
                 self.showError.toggle()
                 self.errorMessage = "Error retrieving cached image"
             }
-//            print("Error retrieving cached image from Realm: \(error)")
         }
         return nil
     }
@@ -186,7 +227,6 @@ class NewsViewModel: ObservableObject {
                 self.showError.toggle()
                 self.errorMessage = "SomeThing Went Wrong"
             }
-//            print("Error clearing cached data: \(error)")
         }
     }
     

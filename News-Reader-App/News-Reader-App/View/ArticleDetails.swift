@@ -99,9 +99,6 @@ struct ArticleDetails: View {
                         .padding()
                     
                     Button(action: {
-                        // if let url = URL(string: article.url) {
-                        //    UIApplication.shared.open(url)
-                        // }
                         if isInternetAvailable() {
                             showWebView.toggle()
                         } else {

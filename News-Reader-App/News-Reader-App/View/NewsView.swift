@@ -134,8 +134,6 @@ struct SearchBar: View {
             } else {
                 Button {
                     articlesViewModel.fetchDataFromApi()
-                    //To Give the feeling of an Refresh
-                    //                self.newsData?.articles.shuffle()
                 } label: {
                     Image(systemName: "arrow.clockwise")
                         .foregroundColor(.gray)
